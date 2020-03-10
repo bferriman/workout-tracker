@@ -1,10 +1,14 @@
 let mongoose = require("mongoose");
 let db = require("../models");
 
+console.log("we're in the seed file");
+
 mongoose.connect("mongodb://localhost/workout", {
   useNewUrlParser: true,
   useFindAndModify: false
 });
+
+console.log("We should have a connection");
 
 let workoutSeed = [
   {

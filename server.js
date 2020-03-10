@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
+var path = require("path");
 
 const PORT = process.env.PORT || 8080;
 
@@ -15,12 +16,31 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
-require("./seeders/seed.js");
+// app.get("/", (req, res) => {
+//   console.log("Here we go");
+// });
 
-app.get("/", (req, res) => {
-  console.log("Here we go");
+app.get("/stats", (req, res) => {
+  console.log("in the stats route");
+  res.sendFile(path.join(__dirname, "public/stats.html"));
+});
+
+app.get("/api/workouts", (req, res) => {
+//return all workouts
+});
+
+app.put("/api/workouts/:id", (req, res) => {
+//add exercise to workout matching id
+});
+
+app.post("/api/workouts", (req, res) => {
+//create a workout
+});
+
+app.get("/api/workouts/range", (req, res) => {
+//not exactly sure what this one wants
 });
 
 // db.User.create({ name: "Ernest Hemingway" })

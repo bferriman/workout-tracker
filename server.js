@@ -38,16 +38,18 @@ app.get("/api/workouts/range", (req, res) => {
   //not exactly sure what this one wants
 });  
 
-app.put("/api/workouts/:id", (req, res) => {
+app.put("/api/workouts/:id", ({ body }, res) => {
 //add exercise to workout matching id
+  db.Exercise.create(body)
+    .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
+
 });
 
 app.post("/api/workouts", ({ body }, res) => {
 //create a workout
   db.Workout.create(body)
-    .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
-    .then(dbUser => {
-      res.json(dbUser);
+    .then(dbWorkout => {
+      res.json(dbWorkout);
     })
     .catch(err => {
       res.json(err);

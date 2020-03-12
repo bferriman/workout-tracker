@@ -18,10 +18,6 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
-// app.get("/", (req, res) => {
-//   console.log("Here we go");
-// });
-
 app.get("/stats", (req, res) => {
   console.log("in the stats route");
   res.sendFile(path.join(__dirname, "public/stats.html"));
@@ -29,18 +25,33 @@ app.get("/stats", (req, res) => {
 
 app.get("/api/workouts", (req, res) => {
 //return all workouts
+  db.Workout.find({})
+    .then(dbWorkout => {
+      res.json(dbWorkout);
+    })
+    .catch(err => {
+      res.json(err);
+    });
 });
+
+app.get("/api/workouts/range", (req, res) => {
+  //not exactly sure what this one wants
+});  
 
 app.put("/api/workouts/:id", (req, res) => {
 //add exercise to workout matching id
 });
 
-app.post("/api/workouts", (req, res) => {
+app.post("/api/workouts", ({ body }, res) => {
 //create a workout
-});
-
-app.get("/api/workouts/range", (req, res) => {
-//not exactly sure what this one wants
+  db.Workout.create(body)
+    .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
+    .then(dbUser => {
+      res.json(dbUser);
+    })
+    .catch(err => {
+      res.json(err);
+    });
 });
 
 // db.User.create({ name: "Ernest Hemingway" })

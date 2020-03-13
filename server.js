@@ -38,11 +38,16 @@ app.get("/api/workouts/range", (req, res) => {
   //not exactly sure what this one wants
 });  
 
-app.put("/api/workouts/:id", ({ body }, res) => {
+app.put("/api/workouts/:id", (req, res) => {
 //add exercise to workout matching id
-  db.Exercise.create(body)
-    .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
-
+  db.Exercise.create(req.body)
+    .then(({ _id }) => {
+      db.Workout.findOneAndUpdate(
+        { _id: req.params.id },  //target workout with id matching route parameter
+        { $push: { exercises: _id } },  //add the new exercise's id to the workout's list of exercises
+        { new: true }
+      );
+    });
 });
 
 app.post("/api/workouts", ({ body }, res) => {

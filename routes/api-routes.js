@@ -26,18 +26,18 @@ module.exports = app => {
             { _id: req.params.id },  //target workout with id matching route parameter
             { $push: { exercises: _id } },  //add the new exercise's id to the workout's list of exercises
             { new: true }
-          );
+          )
+          .then(dbWorkout => {
+            res.json(dbWorkout);
+          })
+          .catch(err => {
+            res.json(err);
+          });  
         })
-        .then(dbWorkout => {
-          res.json(dbWorkout);
-        })
-        .catch(err => {
-          res.json(err);
-        });
     });
     
     app.post("/api/workouts", ({ body }, res) => {
-    //create a workout
+      //create new workout
       db.Workout.create(body)
         .then(dbWorkout => {
           res.json(dbWorkout);

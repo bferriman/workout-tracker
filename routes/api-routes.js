@@ -19,21 +19,18 @@ module.exports = app => {
     });  
     
     app.put("/api/workouts/:id", (req, res) => {
-    //add exercise to workout matching id
-      db.Exercise.create(req.body)
-        .then(({ _id }) => {
-          db.Workout.findOneAndUpdate(
-            { _id: req.params.id },  //target workout with id matching route parameter
-            { $push: { exercises: _id } },  //add the new exercise's id to the workout's list of exercises
-            { new: true }
-          )
-          .then(dbWorkout => {
-            res.json(dbWorkout);
-          })
-          .catch(err => {
-            res.json(err);
-          });  
-        })
+      //add exercise to workout matching id
+      db.Workout.findOneAndUpdate(
+        { _id: req.params.id },  //target workout with id matching route parameter
+        { $push: { exercises: req.body } },  //add the new exercise's id to the workout's list of exercises
+        { new: true }
+      )
+      .then(dbWorkout => {
+        res.json(dbWorkout);
+      })
+      .catch(err => {
+        res.json(err);
+      });  
     });
     
     app.post("/api/workouts", ({ body }, res) => {

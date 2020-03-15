@@ -1,6 +1,6 @@
 # workout-tracker
 
-[Deployed Site](https://benferriman.herokuapp.com/)
+[Deployed Site](https://obscure-earth-41541.herokuapp.com/)
 
 ## Description
 

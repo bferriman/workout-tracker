@@ -208,11 +208,19 @@ function calculateTotalWeight(data) {
 
   data.forEach(workout => {
     let accWeight = 0;
+    let someResistance = false;
     workout.exercises.forEach(exercise => {
-      let weightLifted = exercise.weight * exercise.reps * exercise.sets;
+      let weightLifted = undefined;
+      if(exercise.type === "resistance") {
+        weightLifted = exercise.weight * exercise.reps * exercise.sets;
+        accWeight += weightLifted;
+        someResistance = true;
+      }
       total.exercise.push(weightLifted);
-      accWeight += weightLifted;
     });
+    if(!someResistance) {
+      accWeight = undefined;
+    }
     total.workout.push(accWeight);
   });
 
